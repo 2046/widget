@@ -4,6 +4,3 @@
 [submodule "lib/events"]
 	path = lib/events
 	url = git@github.com:2046/events.git
-[submodule "lib/base"]
-	path = lib/base
-	url = git@github.com:2046/base.git
