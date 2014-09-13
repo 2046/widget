@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Widget Test Runner</title>
+    <link rel="stylesheet" href="../../lib/mocha/mocha.css">
+    <script src="../../lib/seajs/sea.js"></script>
+    <script src="../../lib/mocha/mocha.js"></script>
+    <script src="../../lib/jquery/jquery-1.10.2.min.js"></script>
+</head>
+<body>
+    <div id="mocha"></div>
+
+    <script>
+        seajs.config({
+            base : '/',
+            alias : {
+                'expect' : 'lib/expect/expect.js',
+                'sinon' : 'lib/sinon/sinon-1.7.1.js',
+                'class' : 'lib/class/dist/class.js',
+                'events' : 'lib/events/dist/events.js',
+                'base' : 'lib/base/dist/base.js',
+                'widget' : 'dist/widget.js'
+            }
+        });
+
+        mocha.setup('bdd');
+
+        seajs.use(['./widget-test.js'], function(){
+            mocha.run();
+        });
+    </script>
+</body>
+</html>
