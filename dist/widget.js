@@ -16,19 +16,18 @@ define(function(require, exports, module){
         },
         events : null,
         element : null,
+        specialProps : ['element', 'events'],
         initialize : function(opt){
             Widget.superclass.initialize.call(this, opt);
     
             this.cid = uniqueCid();
             this.parseElement();
-            console.log(this)
-            console.log(this.element)
             if(!this.element || !this.element[0]){
                 throw new Error('element is invalid');
             }
     
             this.delegateEvents();
-            stamp();
+            stamp(this);
             this.setup && this.setup();
         },
         parseElement : function(){
@@ -43,18 +42,16 @@ define(function(require, exports, module){
         delegateEvents : function(events){
             var key, method, match, eventName, selector;
     
-            if(!(events || (events = this.element))){
+            if(!(events || (events = this.events))){
                 return this;
             }
-    
-            this.undelegateEvents();
     
             for(key in events){
                 if(!events.hasOwnProperty(key)){
                     continue;
                 }
     
-                mthod = events[key];
+                method = events[key];
     
                 if(!method){
                     continue;
@@ -65,7 +62,7 @@ define(function(require, exports, module){
                 }
     
                 match = key.match(delegateEventSplitter);
-                selector = match[2];
+                selector = match[2] || undefined;
                 eventName = match[1] + '.delegateEvents' + this.cid;
     
                 (function(handler, widget){
@@ -84,8 +81,24 @@ define(function(require, exports, module){
             return this;
         },
         undelegateEvents : function(eventName){
+            var match, selector, eventName;
+    
             eventName || (eventName = '');
-            this.element.off(eventName + '.delegateEvents' + this.cid);
+            match = eventName.match(delegateEventSplitter);
+    
+            if(match){
+                eventName = match[1] || '';
+                selector = match[2] || undefined;
+            }
+    
+            eventName += '.delegateEvents' + this.cid;
+    
+            if(selector){
+                this.element.off(eventName, selector);
+            }else{
+                this.element.off(eventName);
+            }
+    
             return this;
         },
         render : function(){
@@ -96,8 +109,7 @@ define(function(require, exports, module){
             }
     
             parentNode = this.get('parentNode');
-    
-            if(parentNode && $.contains(this.element[0])){
+            if(parentNode && !$.contains(document.documentElement, this.element[0])){
                 this.element.appendTo(parentNode);
             }
     
