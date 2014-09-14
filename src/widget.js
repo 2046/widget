@@ -1,12 +1,11 @@
 'use strict'
 
-var Base, Widget, cidCounter, cachedInstances, delegateEventSplitter;
+var Base, Widget, cidCounter, cachedInstances;
 
 Base = require('base');
 
 cidCounter = 0;
 cachedInstances = {};
-delegateEventSplitter = /^(\S+)\s*(.*)$/;
 
 Widget = Base.extend({
     attrs : {
@@ -39,7 +38,7 @@ Widget = Base.extend({
         }
     },
     delegateEvents : function(events){
-        var key, method, match, eventName, selector;
+        var key, method, ev;
 
         if(!(events || (events = this.events))){
             return this;
@@ -60,19 +59,17 @@ Widget = Base.extend({
                 method = this[events[key]];
             }
 
-            match = key.match(delegateEventSplitter);
-            selector = match[2] || undefined;
-            eventName = match[1] + '.delegateEvents' + this.cid;
+            ev = parseEventName(this, key);
 
             (function(handler, widget){
                 function cb(args){
                     handler.call(widget, args);
                 };
 
-                if(selector){
-                    widget.element.on(eventName, selector, cb);
+                if(ev.selector){
+                    widget.element.on(ev.type, ev.selector, cb);
                 }else{
-                    widget.element.on(eventName, cb);
+                    widget.element.on(ev.type, cb);
                 }
             })(method, this);
         }
@@ -80,22 +77,12 @@ Widget = Base.extend({
         return this;
     },
     undelegateEvents : function(eventName){
-        var match, selector, eventName;
+        var ev = parseEventName(this, eventName || '');
 
-        eventName || (eventName = '');
-        match = eventName.match(delegateEventSplitter);
-
-        if(match){
-            eventName = match[1] || '';
-            selector = match[2] || undefined;
-        }
-
-        eventName += '.delegateEvents' + this.cid;
-
-        if(selector){
-            this.element.off(eventName, selector);
+        if(ev.selector){
+            this.element.off(ev.type, ev.selector);
         }else{
-            this.element.off(eventName);
+            this.element.off(ev.type);
         }
 
         return this;
@@ -152,6 +139,20 @@ function stamp(ctx){
 
     ctx.element.data('widgetId', ctx);
     cachedInstances[cid] = ctx;
+};
+
+function parseEventName(ctx, eventName){
+    var selector, match;
+
+    if(match = eventName.match(/^(\S+)\s*(.*)$/)){
+        selector = match[2];
+        eventName = match[1];
+    }
+
+    return {
+        selector : selector || undefined,
+        type : (eventName || '') + '.delegateEvents' + ctx.cid
+    };
 };
 
 function isFunction(val){
