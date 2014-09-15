@@ -1,4 +1,6 @@
 define(function(require, exports, module){
+    'use strict'
+
     var Widget, expect, sinon, body;
 
     Widget = require('widget');
