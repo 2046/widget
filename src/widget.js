@@ -1,11 +1,16 @@
 'use strict'
 
-var Base, Widget, cidCounter, cachedInstances;
+// Thanks to:
+//     - http://documentcloud.github.io/backbone/#View
+//     - https://github.com/aralejs/widget/blob/master/src/widget.js
+
+var Base, Widget, cidCounter, cachedInstances, eventType;
 
 Base = require('base');
 
 cidCounter = 0;
 cachedInstances = {};
+eventType = ['click', 'dblclick', 'blur', 'focus', 'mouseover', 'mouseenter', 'mouseout'];
 
 Widget = Base.extend({
     attrs : {
@@ -20,11 +25,13 @@ Widget = Base.extend({
 
         this.cid = uniqueCid();
         this.parseElement();
+
         if(!this.element || !this.element[0]){
             throw new Error('element is invalid');
         }
 
         this.delegateEvents();
+        delegateEventsForAttr(this);
         stamp(this);
         this.setup && this.setup();
     },
@@ -153,6 +160,29 @@ function parseEventName(ctx, eventName){
         selector : selector || undefined,
         type : (eventName || '') + '.delegateEvents' + ctx.cid
     };
+};
+
+function delegateEventsForAttr(ctx){
+    var index, len, element, ns;
+
+    index = 0;
+    element = ctx.element;
+    len = eventType.length;
+    ns = '.delegateEvents' + ctx.cid;
+
+    for(; index < len; index++){
+        (function(type){
+            var attr =  'on-' + type;
+
+            element.on(type + ns, '[' + attr + ']', function(){
+                var callbacks = $(this).attr(attr).split(' ');
+
+                for(var i = 0, l = callbacks.length; i < l; i++){
+                    ctx[callbacks[i]] && ctx[callbacks[i]].apply(ctx, arguments);
+                }
+            });
+        })(eventType[index]);
+    }
 };
 
 function isFunction(val){

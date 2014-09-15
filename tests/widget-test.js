@@ -161,6 +161,45 @@ define(function(require, exports, module){
             ok(spy2.called);
         });
 
+        it('delegateEventsForAttr', function(){
+            var spy1 = sinon.spy();
+            var spy2 = sinon.spy();
+            var spy3 = sinon.spy();
+            var that, event, tpl;
+
+            var TestWidget =  Widget.extend({
+                fn1 : spy1,
+                fn2 : spy2,
+                fn3 : function(ev){
+                    spy3();
+                    event = ev;
+                    that = this;
+                }
+            });
+
+            var widget = globalVar.widget = new TestWidget({
+                template : '<div><p on-click="fn1"></p><ul><li on-click="fn2"></li></ul><span on-mouseenter="fn3"></span></div>'
+            }).render();
+            widget.$('p').trigger('click');
+            ok(spy1.called);
+            spy1.reset();
+
+            widget.$('li').trigger('click');
+            ok(spy2.called);
+            spy2.reset();
+
+            widget.element.trigger('click');
+            expect(spy1.called).not.to.be.ok();
+            expect(spy2.called).not.to.be.ok();
+            spy1.reset();
+            spy2.reset();
+
+            widget.$('span').trigger('mouseenter');
+            ok(spy3.called);
+            equals(event.currentTarget.tagName, 'SPAN');
+            expect(that).to.equal(widget);
+        });
+
         it('undelegateEvents()', function(){
             var spy1 = sinon.spy();
             var spy2 = sinon.spy();
