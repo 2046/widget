@@ -66,8 +66,32 @@ widget.method(); // 2
 
 ###``properties``集合中特殊属性
 
-####``element``属性
-####``events``属性
+####``element``属性，该属性不挂载在 attrs 属性集合中，而是直接挂载在实例上，所以可以直接``this.element``获得到
+
+widget 实例对应的 DOM 节点，是一个 jQuery / Zepto 对象，每个 widget 只有一个 element。
+
+```
+$('<div id="test"></div>').appendTo(document.body);
+
+var WidgetA = Widget.extend({
+    element : '#test'
+});
+
+var widgetA = new WidgetA();
+console.log(widgetA.element); // jQuery DOM: #test
+
+var WidgetB = Widget.extend({});
+var widgetB = new WidgetB();
+console.log(widgetB.element); // jQuery DOM: div，类和实例都不传入 element, 就用 template 构建 element
+```
+
+####``events``属性，该属性不挂载在 attrs 属性集合中，而是直接挂载在实例上，所以可以直接``this.events``获得到
+
+声明``this.element``需要代理的事件，是一个 key/value 的对象
+
+``events``中每一项的格式是：``"eventType selector" : "callback"``，当省略``selector``时，默认会将事件绑定到``this.element``上，``callback``可以是字符串，表示当前实例上的方法名，也可以直接传入函数
+
+
 ####``init``属性
 ####``attrs``属性
 ####``attrs.template``属性
@@ -140,6 +164,8 @@ console.log(spy2 === false); // true
 
 将``this.element``渲染到页面上，子类如果覆盖此方法，请使用``return this``来保持该方法的链式约定
 
+如若没有更改过``attrs.parentNode``的值，那么就把``this.element``放到``document.body``里面
+
 ```
 var WidgetA = Widget.extend({
     attrs : {
@@ -165,6 +191,11 @@ var WdigetB = Widget.extend({
         return this; // 保持链式调用
     }
 });
+
+var widgetB = new WidgetB();
+console.log($('#widget-test').length === 0); // true
+widgetB.render(); // override parent render method test
+console.log($('#widget-test').length === 1); // true
 ```
 
 ###$ ``obj.$(selector)``
