@@ -81,6 +81,28 @@ widget.method(); // 2
 
 添加事件代理，将所有事件都代理到``this.element``对象上
 
+```
+var spy1 = false, spy2 = false;
+var widget = new Widget({
+    template: '<div><p></p><ul><li></li></ul><span></span></div>'
+}).render();
+
+widget.delegateEvents({
+    'click p' : function(){
+        spy1 = true;
+    },
+    'mouseenter' : function(){
+        syp2 = true;
+    }
+});
+
+widget.$('p').trigger('click');
+widget.element.trigger('mouseenter');
+
+console.log(spy1 === true); // true
+console.log(spy2 === true); // true
+```
+
 ###undelegateEvents ``obj.undelegateEvents([eventName])``
 
 卸载事件代理，不带参数时，表示卸载所有事件
