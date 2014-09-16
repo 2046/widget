@@ -66,7 +66,7 @@ widget.method(); // 2
 
 ###``properties``集合中特殊属性
 
-####``element``属性，该属性不挂载在 attrs 属性集合中，而是直接挂载在实例上，所以可以直接``this.element``获得到
+####``element``属性，该属性不挂载在 attrs 属性集合中，而是直接挂载在实例上
 
 widget 实例对应的 DOM 节点，是一个 jQuery / Zepto 对象，每个 widget 只有一个 element。
 
@@ -82,18 +82,65 @@ console.log(widgetA.element); // jQuery DOM: #test
 
 var WidgetB = Widget.extend({});
 var widgetB = new WidgetB();
-console.log(widgetB.element); // jQuery DOM: div，类和实例都不传入 element, 就用 template 构建 element
+console.log(widgetB.element); // jQuery DOM: div，类定义和实例都不传入 element, 就用 template 构建 element
 ```
 
-####``events``属性，该属性不挂载在 attrs 属性集合中，而是直接挂载在实例上，所以可以直接``this.events``获得到
+####``events``属性，该属性不挂载在 attrs 属性集合中，而是直接挂载在实例上
 
 声明``this.element``需要代理的事件，是一个 key/value 的对象
 
 ``events``中每一项的格式是：``"eventType selector" : "callback"``，当省略``selector``时，默认会将事件绑定到``this.element``上，``callback``可以是字符串，表示当前实例上的方法名，也可以直接传入函数
 
+```
+$('<div id="test"><p></p><span></span></div>').appendTo(document.body);
 
-####``init``属性
-####``attrs``属性
+var WidgetA = Widget.extend({
+    element : '#test',
+    events : {
+        'click p' : 'fn'
+        'click span' : function(){
+            console.log('span');
+        }
+    },
+    fn : function(){
+        console.log('p');
+    }
+});
+
+var widgetA = new WidgetA();
+widgetA.$('p').trigger('click'); // p
+widgetA.$('span').trigger('click'); // span
+```
+
+####``init``属性，提供给子类的初始化方法，可以在此处理更多用户自定义的初始化信息
+
+```
+var Demo = Widget.exnted({
+    init : function(){
+        console.log('init');
+    }
+});
+
+new Demo(); // init
+```
+
+####``attrs``属性，类定义时，通过设置 attrs 来定义该类有哪些属性
+
+```
+var Demo = Widget.extend({
+    attrs : {
+        value1 : 1,
+        value2 : 'a',
+        value3 : true,
+        value4 : /a/g,
+        value5 : [a,b,c],
+        value6 : {a : 'a'},
+        value7 : function(){},
+        value8 : null
+    }
+});
+```
+
 ####``attrs.template``属性
 ####``attrs.parentNode``属性
 
