@@ -349,3 +349,38 @@ var widgetA = new WidgetA({
 
 console.log(Widget.query('#test') === widgetA); // true
 ```
+
+###从属性上设置事件代理
+
+在 widget 初始化实例时，可以直接从 DOM 的属性上解析出事件代理
+
+目前支持``click``，``dblclick``，``blur``，``focus``，``mouseover``，``mouseenter``，``mouseout``事件
+
+```
+var spy1 = false, spy2 = false, spy3 = false;
+
+var WidgetA = Widget.extend({
+    fn1 : function(){
+        spy1 = true;
+    },
+    fn2 : function(){
+        spy2 = true;
+    },
+    fn3 : function(){
+        syp3 = true;
+    }
+});
+
+var widgetA = new WidgetA({
+    template : '<div id="test"><p on-click="fn1"></p><ul><li on-click="fn2"></li></ul><span on-mouseenter="fn3"></span></div>'
+}).render();
+
+widgetA.$('p').trigger('click');
+console.log(spy1 === true); // true
+
+widgetA.$('li').trigger('click');
+console.log(spy2 === true); // true
+
+widgetA.$('span').trigger('mouseenter');
+console.log(spy3 === true); // true
+```
