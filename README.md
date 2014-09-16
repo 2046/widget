@@ -350,11 +350,13 @@ var widgetA = new WidgetA({
 console.log(Widget.query('#test') === widgetA); // true
 ```
 
-###从属性上设置事件代理
+###在 DOM 的属性上设置代理的事件
 
-在 widget 初始化实例时，可以直接从 DOM 的属性上解析出事件代理
+在 DOM 上添加一个`on-[eventType]`属性，值是一个或多个空格分隔的实例上的方法名称。
 
-目前支持``click``，``dblclick``，``blur``，``focus``，``mouseover``，``mouseenter``，``mouseout``事件
+在 widget 初始化实例时，可以直接从 DOM 的属性上解析出需要代理的事件，所有的事件都将代理到``this.element``上。
+
+目前支持``click``，``dblclick``，``blur``，``focus``，``mouseover``，``mouseenter``，``mouseout``事件类型。
 
 ```
 var spy1 = false, spy2 = false, spy3 = false;
