@@ -33,7 +33,7 @@ Widget = Base.extend({
         this.delegateEvents();
         delegateEventsForAttr(this);
         stamp(this);
-        this.setup && this.setup();
+        this.init && this.init();
     },
     parseElement : function(){
         var element = this.element;
