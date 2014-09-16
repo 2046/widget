@@ -73,10 +73,6 @@ widget.method(); // 2
 ####``attrs.template``属性
 ####``attrs.parentNode``属性
 
-###parseElement ``obj.parseElement()``
-
-根据配置信息，构建好``this.element``
-
 ###delegateEvents ``obj.delegateEvents(eventsObj)``
 
 添加事件代理，将所有事件都代理到``this.element``对象上
@@ -156,6 +152,19 @@ var widgetA = new WidgetA();
 console.log($('#widget-test').length === 0); // true
 widgetA.render();
 console.log($('#widget-test').length === 1); // true
+
+var WdigetB = Widget.extend({
+    attrs : {
+        template : '<div id="widget-test"></div>'
+    },
+    render : function(){
+        WidgetB.superclass.render.call(this); // 子类覆盖父类 render 方法，一定要记得调用父类的 render 方法，除非重新实现了父类的 render 方法
+        
+        console.log('override parent render method test');
+        
+        return this; // 保持链式调用
+    }
+});
 ```
 
 ###$ ``obj.$(selector)``
