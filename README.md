@@ -100,3 +100,26 @@ widget.method(); // 2
 ###query ``Widget.query(selector)``
 
 查询与 selector 配置的第一个 DOM 节点，得到与该 DOM 节点相关联的 Widget 实例
+
+```
+var WidgetA = Widget.extend({
+    attrs : {
+        a : 1
+    },
+    element : '#test',
+    events : {
+        'click' : 'open',
+        'click .close' : 'close'
+    },
+    open : function(){
+    },
+    close : function(){
+    }
+});
+
+var widgetA = new WidgetA({
+    a : 2
+});
+
+Widget.query('#test'); // returns widgetA instance
+```
