@@ -108,9 +108,10 @@ console.log(spy2 === true); // true
 
 spy1 = false;
 spy2 = false;
+widget.undelegateEvents('click p');
 widget.undelegateEvents();
 
-widget.$('p').trigger('click');
+
 widget.element.trigger('mouseenter');
 
 console.log(spy1 === false); // true
