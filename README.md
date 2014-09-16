@@ -66,9 +66,9 @@ widget.method(); // 2
 
 ###``properties``集合中特殊属性
 
-####``element``属性，该属性不挂载在 attrs 属性集合中，而是直接挂载在实例上
+####``element``属性，widget 实例对应的 DOM 节点，是一个 jQuery / Zepto 对象，每个 widget 只有一个 element
 
-widget 实例对应的 DOM 节点，是一个 jQuery / Zepto 对象，每个 widget 只有一个 element。
+该属性不挂载在 attrs 属性集合中，而是直接挂载在实例上。
 
 ```
 $('<div id="test"></div>').appendTo(document.body);
@@ -85,11 +85,11 @@ var widgetB = new WidgetB();
 console.log(widgetB.element); // jQuery DOM: div，类定义和实例都不传入 element, 就用 template 生成 element
 ```
 
-####``events``属性，该属性不挂载在 attrs 属性集合中，而是直接挂载在实例上
+####``events``属性，声明``this.element``需要代理的事件，是一个 key/value 的对象
 
-声明``this.element``需要代理的事件，是一个 key/value 的对象
+该属性不挂载在 attrs 属性集合中，而是直接挂载在实例上。
 
-``events``中每一项的格式是：``"eventType selector" : "callback"``，当省略``selector``时，默认会将事件绑定到``this.element``上，``callback``可以是字符串，表示当前实例上的方法名，也可以直接传入函数
+``events``中每一项的格式是：``"eventType selector" : "callback"``，当省略``selector``时，默认会将事件绑定到``this.element``上，``callback``可以是字符串，表示当前实例上的方法名，也可以直接传入函数。
 
 ```
 $('<div id="test"><p></p><span></span></div>').appendTo(document.body);
@@ -143,9 +143,9 @@ var Demo = Widget.extend({
 
 ####``attrs.template``属性，使用模板生成``this.element``
 
-该属性默认值是``<div></div>``
+该属性默认值是``<div></div>``。
 
-如若类定义和实例化都没有传入``element``属性，那么就用``template``生成``element``，生成方式是将 html 模板直接转换成 jQuery 对象
+如若类定义和实例化都没有传入``element``属性，那么就用``template``生成``element``，生成方式是将 html 模板直接转换成 jQuery 对象。
 
 ```
 var WidgetA = Widget.extend({
@@ -160,11 +160,11 @@ console.log(widgetA.$('p').length === 1); // true
 
 ####``attrs.parentNode``属性
 
-该属性默认值是``document.body``
+该属性默认值是``document.body``。
 
-该属性的值只能是 jQuery / Zepto / DOM 对象
+该属性的值只能是 jQuery / Zepto / DOM 对象。
 
-详情参考下面的``render``方法使用说明
+详情参考下面的``render``方法使用说明。
 
 ###delegateEvents ``obj.delegateEvents(eventsObj)``
 
