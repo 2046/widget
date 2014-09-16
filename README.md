@@ -121,5 +121,5 @@ var widgetA = new WidgetA({
     a : 2
 });
 
-Widget.query('#test'); // returns widgetA instance
+console.log(Widget.query('#test') === widgetA); // true
 ```
