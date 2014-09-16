@@ -108,13 +108,13 @@ console.log(spy2 === true); // true
 
 spy1 = false;
 spy2 = false;
+
 widget.undelegateEvents('click p');
-widget.undelegateEvents();
-
-
-widget.element.trigger('mouseenter');
-
+widget.$('p').trigger('click');
 console.log(spy1 === false); // true
+
+widget.undelegateEvents();
+widget.element.trigger('mouseenter');
 console.log(spy2 === false); // true
 ```
 
