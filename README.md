@@ -89,6 +89,20 @@ widget.method(); // 2
 
 将``this.element``渲染到页面上，子类如果覆盖此方法，请使用``return this``来保持该方法的链式约定
 
+```
+var WidgetA = Widget.extend({
+    attrs : {
+        template : '<div id="widget-test"></div>'
+    }
+});
+
+var widgetA = new WidgetA();
+
+console.log($('#widget-test').length === 0); // true
+widgetA.render();
+console.log($('#widget-test').length === 1); // true
+```
+
 ###$ ``obj.$(selector)``
 
 在``this.element``内查找匹配的节点
