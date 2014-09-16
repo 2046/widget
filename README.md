@@ -93,6 +93,29 @@ widget.method(); // 2
 
 在``this.element``内查找匹配的节点
 
+```
+var div = $('<div id="test2"><p></p></div>').appendTo(document.body);
+
+var WidgetA = Widget.extend({
+    attrs : {
+        a : 1
+    },
+    element : '#test2',
+    events : {
+        'click' : 'open',
+        'click .close' : 'close'
+    },
+    open : function(){},
+    close : function(){}
+});
+
+var widgetA = new WidgetA({
+    a : 2
+});
+
+console.log(widgetA.$('p')[0].tagName === 'P'); // true
+```
+
 ###destroy ``obj.destroy()``
 
 销毁实例，将实例对应的 element 和事件都销毁
