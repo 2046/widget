@@ -82,7 +82,7 @@ console.log(widgetA.element); // jQuery DOM: #test
 
 var WidgetB = Widget.extend({});
 var widgetB = new WidgetB();
-console.log(widgetB.element); // jQuery DOM: div，类定义和实例都不传入 element, 就用 template 构建 element
+console.log(widgetB.element); // jQuery DOM: div，类定义和实例都不传入 element, 就用 template 生成 element
 ```
 
 ####``events``属性，该属性不挂载在 attrs 属性集合中，而是直接挂载在实例上
@@ -141,8 +141,30 @@ var Demo = Widget.extend({
 });
 ```
 
-####``attrs.template``属性
+####``attrs.template``属性，使用模板生成``this.element``
+
+该属性默认值是``<div></div>``
+
+如若类定义和实例化都没有传入``element``属性，那么就用``template``生成``element``，生成方式是将 html 模板直接转换成 jQuery 对象
+
+```
+var WidgetA = Widget.extend({
+    attrs : {
+        template : '<div><p><p><div>'
+    } 
+});
+
+var widgetA = new WidgetA();
+console.log(widgetA.$('p').length === 1); // true
+```
+
 ####``attrs.parentNode``属性
+
+该属性默认值是``document.body``
+
+该属性的值只能是 jQuery / Zepto / DOM 对象
+
+详情参考下面的``render``方法使用说明
 
 ###delegateEvents ``obj.delegateEvents(eventsObj)``
 
@@ -211,7 +233,7 @@ console.log(spy2 === false); // true
 
 将``this.element``渲染到页面上，子类如果覆盖此方法，请使用``return this``来保持该方法的链式约定
 
-如若没有更改过``attrs.parentNode``的值，那么就把``this.element``放到``document.body``里面
+render 具体实现是获得``attrs.parentNode``的值，然后把``this.element``属性 appendTo 到该值里
 
 ```
 var WidgetA = Widget.extend({
