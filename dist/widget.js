@@ -25,25 +25,11 @@ define(function(require, exports, module){
             Widget.superclass.initialize.call(this, opt);
     
             this.cid = uniqueCid();
-            this.parseElement();
-    
-            if(!this.element || !this.element[0]){
-                throw new Error('element is invalid');
-            }
-    
+            parseElement(this);
             this.delegateEvents();
             delegateEventsForAttr(this);
             stamp(this);
-            this.setup && this.setup();
-        },
-        parseElement : function(){
-            var element = this.element;
-    
-            if(element){
-                this.element = $(element);
-            }else if(this.get('template')){
-                this.element = $(this.get('template'));
-            }
+            this.init && this.init();
         },
         delegateEvents : function(events){
             var key, method, ev;
@@ -145,8 +131,21 @@ define(function(require, exports, module){
     function stamp(ctx){
         var cid = ctx.cid;
     
-        ctx.element.data('widgetId', ctx);
+        ctx.element.data('widgetId', cid);
         cachedInstances[cid] = ctx;
+    };
+    
+    function parseElement(ctx){
+        var element, template;
+    
+        element = ctx.element;
+        template = ctx.get('template');
+    
+        ctx.element = element ? $(element) : $(template);
+    
+        if(!ctx.element || !ctx.element[0]){
+            throw new Error('element is invalid');
+        }
     };
     
     function parseEventName(ctx, eventName){

@@ -434,5 +434,48 @@ define(function(require, exports, module){
             a.set('testElement', document.body);
             equals(a.get('testElement'), document.body);
         });
+
+        it('Widget.query', function(){
+            var div = $('<div id="test"></div>').appendTo(document.body);
+            var WidgetA = Widget.extend({
+                attrs : {
+                    a : 1
+                },
+                element : '#test',
+                events : {
+                    'click' : 'open',
+                    'click .close' : 'close'
+                },
+                open : function(){},
+                close : function(){}
+            });
+
+            var widgetA = new WidgetA({
+                a : 2
+            });
+            equals(Widget.query('#test'), widgetA);
+        });
+
+        it('$', function(){
+            var div = $('<div id="test2"><p></p></div>').appendTo(document.body);
+            var WidgetA = Widget.extend({
+                attrs : {
+                    a : 1
+                },
+                element : '#test2',
+                events : {
+                    'click' : 'open',
+                    'click .close' : 'close'
+                },
+                open : function(){},
+                close : function(){}
+            });
+
+            var widgetA = new WidgetA({
+                a : 2
+            });
+
+            equals(widgetA.$('p')[0].tagName, 'P');
+        });
     });
 });
