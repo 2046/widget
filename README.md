@@ -85,6 +85,38 @@ widget.method(); // 2
 
 卸载事件代理，不带参数时，表示卸载所有事件
 
+```
+var spy1 = false, spy2 = false;
+var widget = new Widget({
+    template: '<div><p></p><ul><li></li></ul><span></span></div>'
+}).render();
+
+widget.delegateEvents({
+    'click p' : function(){
+        spy1 = true;
+    },
+    'mouseenter' : function(){
+        syp2 = true;
+    }
+});
+
+widget.$('p').trigger('click');
+widget.element.trigger('mouseenter');
+
+console.log(spy1 === true); // true
+console.log(spy2 === true); // true
+
+spy1 = false;
+spy2 = false;
+widget.undelegateEvents();
+
+widget.$('p').trigger('click');
+widget.element.trigger('mouseenter');
+
+console.log(spy1 === false); // true
+console.log(spy2 === false); // true
+```
+
 ###render ``obj.render()``
 
 将``this.element``渲染到页面上，子类如果覆盖此方法，请使用``return this``来保持该方法的链式约定
