@@ -14,6 +14,7 @@ eventType = ['click', 'dblclick', 'blur', 'focus', 'mouseover', 'mouseenter', 'm
 
 Widget = Base.extend({
     attrs : {
+        styles : null,
         template : '<div></div>',
         parentNode : document.body
     },
@@ -135,15 +136,28 @@ function stamp(ctx){
 };
 
 function parseElement(ctx){
-    var element, template;
+    var element, template, styles, style;
 
+    styles = ctx.get('styles');
     element = ctx.element;
     template = ctx.get('template');
 
-    ctx.element = element ? $(element) : $(template);
+    element = ctx.element = element ? $(element) : $(template);
 
-    if(!ctx.element || !ctx.element[0]){
+    if(!element || !element[0]){
         throw new Error('element is invalid');
+    }
+
+    if(styles){
+        for(style in styles){
+            if(styles.hasOwnProperty(style)){
+                if(style === 'element'){
+                    element.css(styles[style]);
+                }else{
+                    element.find(style).css(styles[style]);
+                }
+            }
+        }
     }
 };
 
