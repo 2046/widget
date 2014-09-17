@@ -141,6 +141,41 @@ var Demo = Widget.extend({
 });
 ```
 
+####``attrs.styles``属性，为``this.element``和``this.element``内的元素添加样式
+
+``attrs.styles``属性值是一个 key/value 的对象，其中 key 表示需要在``this.element``内查找的节点名称（即 CSS选择器），value 表示需要添加的样式集，有一个特殊的 key 是 element，其表示在``this.element``自身添加样式集
+
+```
+var div = $('<div id="test3"><p><a class="link"></a></p></div>').appendTo(document.body);
+var WidgetA = Widget.extend({
+    attrs : {
+        a : 1,
+        styles : {
+            'element' : {
+                'width' : 100
+            },
+            'p' : {
+                'position' : 'relative',
+                'zIndex' : 10
+            },
+            'p .link' : {
+                'display' : 'block'
+            }
+        }
+    },
+    element : '#test3'
+});
+
+var widgetA = new WidgetA({
+    a : 2
+});
+
+console.log(widgetA.element.css('width')); // 100px
+console.log(widgetA.$('p').css('position')); // relative
+console.log(parseInt(widgetA.$('p').css('zIndex'))); // 10
+console.log(widgetA.$('p .link').css('display')); // block
+```
+
 ####``attrs.template``属性，使用模板生成``this.element``
 
 该属性默认值是``<div></div>``。
