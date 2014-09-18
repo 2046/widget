@@ -143,7 +143,7 @@ var Demo = Widget.extend({
 
 ####``attrs.styles``属性，为``this.element``和``this.element``内的元素添加样式
 
-``attrs.styles``属性值是一个 key/value 的对象，其中 key 表示需要在``this.element``内查找的节点名称（即 CSS选择器），value 表示需要添加的样式集，有一个特殊的 key 是 element，其表示在``this.element``自身添加样式集
+``attrs.styles``属性值是一个 key/value 的对象，其中 key 表示需要在``this.element``内查找的节点名称（即 CSS选择器），value 表示需要添加的样式集，有一个特殊的 key 是 element，其表示为``this.element``自身添加样式集
 
 ```
 var div = $('<div id="test3"><p><a class="link"></a></p></div>').appendTo(document.body);
