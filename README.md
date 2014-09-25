@@ -412,6 +412,14 @@ var widgetA = new WidgetA({
 console.log(Widget.query('#test') === widgetA); // true
 ```
 
+###show ``obj.show()``
+
+如果该实例没有执行过``render``方法，先执行``render``方法，然后通过设置``attrs.visible``的值来显示``this.element``。
+
+###hide ``obj.hide()``
+
+通过设置``attrs.visible``的值来隐藏``this.element``。
+
 ###在 DOM 的属性上设置代理的事件
 
 在 DOM 上添加一个`on-[eventType]`属性，值是一个或多个空格分隔的实例上的方法名称。
