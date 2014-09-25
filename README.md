@@ -124,6 +124,10 @@ var Demo = Widget.exnted({
 new Demo(); // init
 ```
 
+###``_onRenderX``属性
+
+该属性会在调用``render``方法的时候（插入文档流之前）触发，但当属性值为``null``或``undefined``时则不触发，触发后会自动在实例上绑定``change:x`事件
+
 ####``attrs``属性，类定义时，通过设置 attrs 来定义该类有哪些属性
 
 ```
@@ -200,6 +204,14 @@ console.log(widgetA.$('p').length === 1); // true
 该属性的值只能是 jQuery / Zepto / DOM 对象。
 
 详情参考下面的``render``方法使用说明。
+
+####``attrs.className``属性，给``this.element``添加 class
+
+该属性会在执行``render``方法时，自动给``this.element``添加 class，且在实例上注册``change:className``事件
+
+####``attrs.visible``属性，是否显示``this.element``
+
+该属性会在执行``render``方法时，判断其值来决定是否显示``this.element``，并在实例上注册``change:visible``事件
 
 ###delegateEvents ``obj.delegateEvents(eventsObj)``
 
