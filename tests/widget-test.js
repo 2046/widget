@@ -508,5 +508,84 @@ define(function(require, exports, module){
             equals(parseInt(widgetA.$('p').css('zIndex')), 10);
             equals(widgetA.$('p .link').css('display'), 'block');
         });
+
+        it('set attribute before render method', function(){
+            var r = [], p = [];
+
+            var A = Widget.extend({
+                attrs : {
+                    a : 1
+                },
+                _onRenderA : function(val, prev){
+                    r.push(val);
+                    p.push(prev);
+                }
+            });
+
+            var a = globalVar.a = new A({a : 2});
+            a.set('a', 3);
+            a.render();
+
+            equals(r.join(), '3');
+            equals(p.join(), '');
+        });
+
+        it('call render() after first render', function(){
+            var counter = 0;
+
+            function incr(){
+                counter++;
+            }
+
+            var A = Widget.extend({
+                attrs : {
+                    a : 1
+                },
+                _onRenderA : incr
+            });
+
+            var a = globalVar.a = new A();
+            a.render();
+
+            equals(counter, 1);
+
+            a.render;
+            equals(counter, 1);
+        });
+
+        it('set call onRender', function(){
+            var spy = sinon.spy();
+            var A = Widget.extend({
+                attrs : {
+                    a : 1
+                },
+                _onRenderA : spy
+            });
+
+            var a = new A();
+
+            a.render();
+            expect(spy.calledOnce).to.be.ok();
+
+            a.set('a', 2);
+            expect(spy.calledTwice).to.be.ok();
+        });
+
+        it('show & hide', function(){
+            var A = Widget.extend({
+                attrs : {
+                    className : 'test'
+                }
+            });
+
+            var a = globalVar.a = new A();
+            equals(a.get('visible'), false);
+
+            a.show();
+            equals(a.get('visible'), true);
+
+            a.hide();
+            equals(a.get('visible'), false);
+        });
     });
 });

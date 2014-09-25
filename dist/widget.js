@@ -16,6 +16,8 @@ define(function(require, exports, module){
     Widget = Base.extend({
         attrs : {
             styles : null,
+            visible : false,
+            className : '',
             template : '<div></div>',
             parentNode : document.body
         },
@@ -86,6 +88,7 @@ define(function(require, exports, module){
             var parentNode;
     
             if(!this.rendered){
+                renderAndBindAttrs(this);
                 this.rendered = true;
             }
     
@@ -99,6 +102,18 @@ define(function(require, exports, module){
         $ : function(selector){
             return this.element.find(selector);
         },
+        show : function(){
+            if(!this.rendered){
+                this.render();
+            }
+    
+            this.set('visible', true);
+            return this;
+        },
+        hide : function(){
+            this.set('visible', false);
+            return this;
+        },
         destroy : function(){
             this.undelegateEvents();
             delete cachedInstances[this.cid];
@@ -106,6 +121,12 @@ define(function(require, exports, module){
             this.element.remove();
             this.element = null;
             Widget.superclass.destroy.call(this);
+        },
+        _onRenderVisible : function(val){
+            this.element[val ? 'fadeIn' : 'fadeOut']();
+        },
+        _onRenderClassName : function(val){
+            this.element.addClass(val);
         }
     });
     
@@ -162,6 +183,34 @@ define(function(require, exports, module){
         }
     };
     
+    function renderAndBindAttrs(ctx){
+        var attrs, attr, method, val;
+    
+        attrs = ctx.attrs;
+    
+        for(attr in attrs){
+            if(!attrs.hasOwnProperty(attr)){
+                continue;
+            }
+    
+            method = '_onRender' + capitalize(attr);
+    
+            if(ctx[method]){
+                val = ctx.get(attr);
+    
+                if(!isEmptyAttrValue(val)){
+                    ctx[method](val, undefined, attr);
+                }
+    
+                (function(method){
+                    ctx.on('change:' + attr, function(val, prev, key){
+                        ctx[method](val, prev, key);
+                    });
+                })(method);
+            }
+        }
+    };
+    
     function parseEventName(ctx, eventName){
         var selector, match;
     
@@ -202,6 +251,14 @@ define(function(require, exports, module){
     function isFunction(val){
         return Object.prototype.toString.call(val) === '[object Function]';
     };
+    
+    function capitalize(val){
+        return val.charAt(0).toUpperCase() + val.slice(1);
+    };
+    
+    function isEmptyAttrValue(val){
+        return val == null || val === undefined;
+    }
     
     module.exports = Widget;
 });
