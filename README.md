@@ -128,6 +128,21 @@ new Demo(); // init
 
 该属性会在调用``render``方法的时候（插入文档流之前）触发，但当属性值为``null``或``undefined``时则不触发，触发后会自动在实例上绑定``change:x`事件
 
+```
+var A = Widget.extend({
+    attrs : {
+        a : 1
+    },
+    _onRenderA : function(val){
+        console.log(val)
+    }
+});
+
+var a = new A();
+a.render(); // 1;
+a.set('a', 2); // 2
+```
+
 ####``attrs``属性，类定义时，通过设置 attrs 来定义该类有哪些属性
 
 ```
