@@ -126,7 +126,7 @@ new Demo(); // init
 
 ###``_onRenderX``属性
 
-该属性会在调用``render``方法的时候（插入文档流之前）触发，但当属性值为``null``或``undefined``时则不触发，触发后会自动在实例上绑定``change:x`事件
+该属性会在调用``render``方法的时候（插入文档流之前）触发，但当属性值为``null``或``undefined``时则不触发，触发后会自动在实例上注册``change:x``事件
 
 ```
 var A = Widget.extend({
@@ -183,7 +183,7 @@ console.log(widgetA.$('p').length === 1); // true
 
 该属性的值只能是 jQuery / Zepto / DOM 对象。
 
-详情参考下面的``render``方法使用说明。
+将``this.element``插入到``attrs.parentNode``指定的 DOM 内部
 
 ####``attrs.className``属性，给``this.element``添加 class
 
@@ -259,8 +259,6 @@ console.log(spy2 === false); // true
 ###render ``obj.render()``
 
 将``this.element``渲染到页面上，子类如果覆盖此方法，请使用``return this``来保持该方法的链式约定
-
-render 具体实现是获得``attrs.parentNode``的值，然后把``this.element``属性 appendTo 到该值里
 
 ```
 var WidgetA = Widget.extend({
