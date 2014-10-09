@@ -478,37 +478,6 @@ define(function(require, exports, module){
             equals(widgetA.$('p')[0].tagName, 'P');
         });
 
-        it('styles', function(){
-            var div = $('<div id="test3"><p><a class="link"></a></p></div>').appendTo(document.body);
-            var WidgetA = Widget.extend({
-                attrs : {
-                    a : 1,
-                    styles : {
-                        'element' : {
-                            'width' : 100
-                        },
-                        'p' : {
-                            'position' : 'relative',
-                            'zIndex' : 10
-                        },
-                        'p .link' : {
-                            'display' : 'block'
-                        }
-                    }
-                },
-                element : '#test3'
-            });
-
-            var widgetA = new WidgetA({
-                a : 2
-            });
-
-            equals(widgetA.element.css('width'), '100px');
-            equals(widgetA.$('p').css('position'), 'relative');
-            equals(parseInt(widgetA.$('p').css('zIndex')), 10);
-            equals(widgetA.$('p .link').css('display'), 'block');
-        });
-
         it('set attribute before render method', function(){
             var r = [], p = [];
 
@@ -569,23 +538,6 @@ define(function(require, exports, module){
 
             a.set('a', 2);
             expect(spy.calledTwice).to.be.ok();
-        });
-
-        it('show & hide', function(){
-            var A = Widget.extend({
-                attrs : {
-                    className : 'test'
-                }
-            });
-
-            var a = globalVar.a = new A();
-            equals(a.get('visible'), false);
-
-            a.show();
-            equals(a.get('visible'), true);
-
-            a.hide();
-            equals(a.get('visible'), false);
         });
     });
 });

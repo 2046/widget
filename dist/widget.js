@@ -15,8 +15,7 @@ define(function(require, exports, module){
     
     Widget = Base.extend({
         attrs : {
-            styles : null,
-            visible : false,
+            style : null,
             className : '',
             template : '<div></div>',
             parentNode : document.body
@@ -102,18 +101,6 @@ define(function(require, exports, module){
         $ : function(selector){
             return this.element.find(selector);
         },
-        show : function(){
-            if(!this.rendered){
-                this.render();
-            }
-    
-            this.set('visible', true);
-            return this;
-        },
-        hide : function(){
-            this.set('visible', false);
-            return this;
-        },
         destroy : function(){
             this.undelegateEvents();
             delete cachedInstances[this.cid];
@@ -122,11 +109,11 @@ define(function(require, exports, module){
             this.element = null;
             Widget.superclass.destroy.call(this);
         },
-        _onRenderVisible : function(val){
-            this.element[val ? 'fadeIn' : 'fadeOut']();
-        },
         _onRenderClassName : function(val){
             this.element.addClass(val);
+        },
+        _onRenderStyle : function(val){
+            this.element.css(val);
         }
     });
     
@@ -158,28 +145,12 @@ define(function(require, exports, module){
     };
     
     function parseElement(ctx){
-        var element, template, styles, style;
+        var element = ctx.get('element');
     
-        styles = ctx.get('styles');
-        element = ctx.element;
-        template = ctx.get('template');
+        ctx.element = element ? $(element) : $(ctx.get('template'));
     
-        element = ctx.element = element ? $(element) : $(template);
-    
-        if(!element || !element[0]){
+        if(!ctx.element || !ctx.element[0]){
             throw new Error('element is invalid');
-        }
-    
-        if(styles){
-            for(style in styles){
-                if(styles.hasOwnProperty(style)){
-                    if(style === 'element'){
-                        element.css(styles[style]);
-                    }else{
-                        element.find(style).css(styles[style]);
-                    }
-                }
-            }
         }
     };
     
@@ -228,19 +199,19 @@ define(function(require, exports, module){
     function delegateEventsForAttr(ctx){
         var index, len, element, ns;
     
-        index = 0;
         element = ctx.element;
         len = eventType.length;
         ns = '.delegateEvents' + ctx.cid;
     
-        for(; index < len; index++){
+        for(index = 0; index < len; index++){
             (function(type){
-                var attr =  'on-' + type;
+                var attr, callbacks, i, l;
     
+                attr =  'on-' + type;
                 element.on(type + ns, '[' + attr + ']', function(){
-                    var callbacks = $(this).attr(attr).split(' ');
+                    callbacks = $(this).attr(attr).split(' ');
     
-                    for(var i = 0, l = callbacks.length; i < l; i++){
+                    for(i = 0, l = callbacks.length; i < l; i++){
                         ctx[callbacks[i]] && ctx[callbacks[i]].apply(ctx, arguments);
                     }
                 });
@@ -258,7 +229,7 @@ define(function(require, exports, module){
     
     function isEmptyAttrValue(val){
         return val == null || val === undefined;
-    }
+    };
     
     module.exports = Widget;
 });
