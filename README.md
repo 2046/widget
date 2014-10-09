@@ -160,41 +160,6 @@ var Demo = Widget.extend({
 });
 ```
 
-####``attrs.styles``属性，为``this.element``和``this.element``内的元素添加样式
-
-``attrs.styles``属性值是一个 key/value 的对象，其中 key 表示需要在``this.element``内查找的节点名称（即 CSS选择器），value 表示需要添加的样式集，有一个特殊的 key 是 element，其表示为``this.element``自身添加样式集
-
-```
-var div = $('<div id="test3"><p><a class="link"></a></p></div>').appendTo(document.body);
-var WidgetA = Widget.extend({
-    attrs : {
-        a : 1,
-        styles : {
-            'element' : {
-                'width' : 100
-            },
-            'p' : {
-                'position' : 'relative',
-                'zIndex' : 10
-            },
-            'p .link' : {
-                'display' : 'block'
-            }
-        }
-    },
-    element : '#test3'
-});
-
-var widgetA = new WidgetA({
-    a : 2
-});
-
-console.log(widgetA.element.css('width')); // 100px
-console.log(widgetA.$('p').css('position')); // relative
-console.log(parseInt(widgetA.$('p').css('zIndex'))); // 10
-console.log(widgetA.$('p .link').css('display')); // block
-```
-
 ####``attrs.template``属性，使用模板生成``this.element``
 
 该属性默认值是``<div></div>``。
@@ -224,9 +189,9 @@ console.log(widgetA.$('p').length === 1); // true
 
 该属性会在执行``render``方法时，自动给``this.element``添加 class，且在实例上注册``change:className``事件
 
-####``attrs.visible``属性，是否显示``this.element``
+####``attrs.style``属性，给``this.element``添加样式
 
-该属性会在执行``render``方法时，判断其值来决定是否显示``this.element``，并在实例上注册``change:visible``事件
+该属性会在执行``render``方式时，自动给``this.element``添加样式
 
 ###delegateEvents ``obj.delegateEvents(eventsObj)``
 
@@ -411,14 +376,6 @@ var widgetA = new WidgetA({
 
 console.log(Widget.query('#test') === widgetA); // true
 ```
-
-###show ``obj.show()``
-
-如果该实例没有执行过``render``方法，先执行``render``方法，然后通过设置``attrs.visible``的值来显示``this.element``。
-
-###hide ``obj.hide()``
-
-通过设置``attrs.visible``的值来隐藏``this.element``。
 
 ###在 DOM 的属性上设置代理的事件
 
