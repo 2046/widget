@@ -83,14 +83,13 @@ Widget = Base.extend({
         return this;
     },
     render : function(){
-        var parentNode;
+        var parentNode = this.get('parentNode');
 
         if(!this.rendered){
             renderAndBindAttrs(this);
             this.rendered = true;
         }
 
-        parentNode = this.get('parentNode');
         if(parentNode && !$.contains(document.documentElement, this.element[0])){
             this.element.appendTo(parentNode);
         }
