@@ -1,9 +1,0 @@
-[submodule "lib/class"]
-	path = lib/class
-	url = git@github.com:2046/class.git
-[submodule "lib/events"]
-	path = lib/events
-	url = git@github.com:2046/events.git
-[submodule "lib/base"]
-	path = lib/base
-	url = git@github.com:2046/base.git
