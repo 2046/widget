@@ -31,7 +31,7 @@ define(function(require, exports, module){
             this.delegateEvents();
             delegateEventsForAttr(this);
             stamp(this);
-            this.init && this.init();
+            this.setup && this.setup();
         },
         delegateEvents : function(events){
             var key, method, ev;
@@ -84,14 +84,13 @@ define(function(require, exports, module){
             return this;
         },
         render : function(){
-            var parentNode;
+            var parentNode = this.get('parentNode');
     
             if(!this.rendered){
                 renderAndBindAttrs(this);
                 this.rendered = true;
             }
     
-            parentNode = this.get('parentNode');
             if(parentNode && !$.contains(document.documentElement, this.element[0])){
                 this.element.appendTo(parentNode);
             }

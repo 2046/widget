@@ -16,11 +16,11 @@ seajs.use(['widget'], function(Widget){
             console.log(this.get('a'));
         }
     });
-    
+
     var widget = new WidgetA({
         a : 2
     }).render();
-    widget.method(); // 2    
+    widget.method(); // 2
 });
 
 require(['widget'], function(Widget){
@@ -32,11 +32,11 @@ require(['widget'], function(Widget){
             console.log(this.get('a'));
         }
     });
-    
+
     var widget = new WidgetA({
         a : 2
     }).render();
-    widget.method(); // 2    
+    widget.method(); // 2
 });
 ```
 
@@ -112,16 +112,16 @@ widgetA.$('p').trigger('click'); // p
 widgetA.$('span').trigger('click'); // span
 ```
 
-####``init``属性，提供给子类的初始化方法，可以在此处理更多用户自定义的初始化信息
+####``setup``属性，创建实例时调用的初始化方法
 
 ```
 var Demo = Widget.exnted({
-    init : function(){
-        console.log('init');
+    setup : function(){
+        console.log('setup');
     }
 });
 
-new Demo(); // init
+new Demo(); // setup
 ```
 
 ###``_onRenderX``属性
@@ -170,7 +170,7 @@ var Demo = Widget.extend({
 var WidgetA = Widget.extend({
     attrs : {
         template : '<div><p><p><div>'
-    } 
+    }
 });
 
 var widgetA = new WidgetA();
@@ -279,9 +279,9 @@ var WdigetB = Widget.extend({
     },
     render : function(){
         WidgetB.superclass.render.call(this); // 子类覆盖父类 render 方法，一定要记得调用父类的 render 方法，除非重新实现了父类的 render 方法
-        
+
         console.log('override parent render method test');
-        
+
         return this; // 保持链式调用
     }
 });

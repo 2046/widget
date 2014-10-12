@@ -30,7 +30,7 @@ Widget = Base.extend({
         this.delegateEvents();
         delegateEventsForAttr(this);
         stamp(this);
-        this.init && this.init();
+        this.setup && this.setup();
     },
     delegateEvents : function(events){
         var key, method, ev;
