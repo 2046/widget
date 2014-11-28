@@ -10,7 +10,7 @@ Base = require('base');
 
 cidCounter = 0;
 cachedInstances = {};
-eventType = ['click', 'dblclick', 'blur', 'focus', 'mouseover', 'mouseenter', 'mouseout'];
+eventType = ['click', 'dblclick', 'blur', 'focus', 'mouseover', 'mouseenter', 'mouseout', 'submit'];
 
 Widget = Base.extend({
     attrs : {
