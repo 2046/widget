@@ -11,7 +11,7 @@ define(function(require, exports, module){
     
     cidCounter = 0;
     cachedInstances = {};
-    eventType = ['click', 'dblclick', 'blur', 'focus', 'mouseover', 'mouseenter', 'mouseout'];
+    eventType = ['click', 'dblclick', 'blur', 'focus', 'mouseover', 'mouseenter', 'mouseout', 'submit'];
     
     Widget = Base.extend({
         attrs : {
